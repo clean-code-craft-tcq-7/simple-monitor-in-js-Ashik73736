@@ -23,23 +23,25 @@ async function isVitalOk(name, value, minVal, maxVal) {
   return true;
 }
 
-async function isTemperatureOk(temperature) {
-  return await isVitalOk('Temperature', temperature, 95, 102);
+function checkTemperature(temperature) {
+  return isVitalOk('Temperature', temperature, 95, 102);
 }
 
-async function isPulseRateOk(pulseRate) {
-  return await isVitalOk('Pulse Rate', pulseRate, 60, 100);
+function checkPulse(pulseRate) {
+  return isVitalOk('Pulse Rate', pulseRate, 60, 100);
 }
 
-async function isSpo2Ok(spo2) {
-  return await isVitalOk('Oxygen Saturation', spo2, 90, Infinity);
+function checkSpo2(spo2) {
+  return isVitalOk('Oxygen Saturation', spo2, 90, Infinity);
 }
 
-async function vitalsOk(temperature, pulseRate, spo2) {
-  const tempOk = await isTemperatureOk(temperature);
-  const pulseOk = await isPulseRateOk(pulseRate);
-  const spo2Ok = await isSpo2Ok(spo2);
-  return tempOk && pulseOk && spo2Ok;
+function vitalsOk(temperature, pulseRate, spo2) {
+  const checks = [
+    checkTemperature(temperature),
+    checkPulse(pulseRate),
+    checkSpo2(spo2),
+  ];
+  return checks.every(Boolean);
 }
 
 function askQuestion(query) {
