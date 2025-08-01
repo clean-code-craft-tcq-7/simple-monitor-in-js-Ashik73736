@@ -1,26 +1,20 @@
+function isInRange(value, min, max) {
+  return value >= min && value <= max;
+}
+
+function checkVital(name, value, min, max) {
+  const result = isInRange(value, min, max);
+  if (!result) {
+    console.log(`${name} is out of range: ${value}`);
+  }
+  return result;
+}
 
 export async function vitalsOk(temperature, pulseRate, spo2) {
-  if (temperature > 102 || temperature < 95) {
-    console.log("Temperature is critical!");
-    for (let i = 0; i < 6; i++) {
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      await new Promise(resolve => setTimeout(resolve, 1000));
-    }
-    return false;
-  } else if (pulseRate < 60 || pulseRate > 100) {
-    console.log("Pulse Rate is out of range!");
-    for (let i = 0; i < 6; i++) {
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      await new Promise(resolve => setTimeout(resolve, 1000));
-    }
-    return false;
-  } else if (spo2 < 90) {
-    console.log("Oxygen Saturation out of range!");
-    for (let i = 0; i < 6; i++) {
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      await new Promise(resolve => setTimeout(resolve, 1000));
-    }
-    return false;
-  }
-  return true;
+  const checks = [
+    checkVital("Temperature", temperature, 97, 99),
+    checkVital("Pulse Rate", pulseRate, 60, 100),
+    checkVital("SPO2", spo2, 95, 100),
+  ];
+  return checks.every(Boolean);
 }
